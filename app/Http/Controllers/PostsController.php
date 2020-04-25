@@ -47,7 +47,7 @@ class PostsController extends Controller
     {
         $data = $req->all();
 
-        $image_path = request('image')->store('uploads', 'public');
+        $image_path = request('image')->store('uploads', 'public');dd(22);exit;
         $image = Image::make(public_path("storage/{$image_path}"))->fit(1200, 1200);
         $image->save();
 
