@@ -18,7 +18,7 @@
                     </div>
                     <div>
                         <div class="font-weight-bold row mt-2">
-                            <a class="ml-2 card-link" href="/profile/{{ $post->user->id }}">
+                            <a class="ml-2 mr-4 card-link" href="/profile/{{ $post->user->id }}">
                                 <span class="text-dark">{{ $post->user->username }}</span>
                             </a>
                             @if(Auth::id() != $post->user->id)
