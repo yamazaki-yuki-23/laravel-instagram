@@ -4,13 +4,17 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <img src="/storage/{{ $post->image }}" class="w-100">
+            <img src="data:img/png;base64,{{$post->image}}" class="w-100">
         </div>
         <div class="col-4">
             <div class="card">
                 <div class="d-flex align-items-center">
                     <div class="pr-3 ml-2 mt-2">
-                        <img src="{{ $post->user->profile->profileImage() }}" class="rounded-circle w-100" style="max-width: 40px;">
+                        @if($post->user->profile->profileImage())
+                            <img src="data:img/png;base64,{{ $post->user->profile->profileImage() }}" class="rounded-circle w-100" style="max-width: 40px;">
+                        @else
+                            <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="rounded-circle w-100" style="max-width: 40px;">
+                        @endif
                     </div>
                     <div>
                         <div class="font-weight-bold row mt-2">

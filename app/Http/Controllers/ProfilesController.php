@@ -72,11 +72,12 @@ class ProfilesController extends Controller
         $data = $req->all();
 
         if(request('image')) {
-            $imagePath = request('image')->store('profile', 'public');
-            $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
-            $image->save();
+            // $imagePath = request('image')->store('profile', 'public');
+            // $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+            // $image->save();
+            $image = base64_encode(file_get_contents(request('image')->getRealPath()));
 
-            $imageArray = ['image' => $imagePath];
+            $imageArray = ['image' => $image];
         }
 
         auth()->user()->profile->update(array_merge(

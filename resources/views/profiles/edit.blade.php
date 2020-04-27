@@ -66,7 +66,11 @@
                     <div class="row">
                         <label for="image" class="col-md-10 col-form-label">プロフィール写真<span class="text-dark">(任意)</span></label>
 
-                        <div class="col-md-3 ProfileImagePreview" style="background-image: url({{Auth::user()->profile->profileImage()}})"></div>
+                        @if(Auth::user()->profile->profileImage())
+                            <div class="col-md-3 ProfileImagePreview" style="background-image: url(data:img/png;base64,{{Auth::user()->profile->profileImage()}})"></div>
+                        @else
+                            <div class="col-md-3 ProfileImagePreview" style="background-image: url(/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg)"></div>
+                        @endif
                         <div class="input-group mt-2">
                             <label class="input-group-btn">
                                 <span class="uploade-image">

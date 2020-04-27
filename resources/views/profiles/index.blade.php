@@ -4,7 +4,11 @@
 <div class="container">
     <div class="row">
         <div class="col-3 p-5">
-            <img src="{{ $user->profile->profileImage() }}" class="rounded-circle w-100">
+            @if($user->profile->profileImage())
+                <img src="data:img/png;base64,{{ $user->profile->profileImage() }}" class="rounded-circle w-100" style="max-height:120px;">
+            @else
+                <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="rounded-circle w-100" style="max-height:120px;">
+            @endif
         </div>
         <div class="col-9 pt-5">
             <div class="d-flex justify-content-between align-items-baseline">
@@ -67,7 +71,11 @@
                             <div class="row">
                                 <div class="col-3 px-5 pb-3">
                                     <a href="/profile/{{ $follower->id }}">
-                                        <img src="{{ $imagePath->getImagePath($follower->id)->profileImage() }}" class="rounded-circle w-100">
+                                        @if($imagePath->getImagePath($follower->id)->profileImage())
+                                            <img src="data:img/png;base64,{{ $imagePath->getImagePath($follower->id)->profileImage() }}" class="rounded-circle w-100">
+                                        @else
+                                            <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="rounded-circle w-100">
+                                        @endif
                                     </a>
                                 </div>
 
@@ -100,7 +108,11 @@
                             <div class="row">
                                 <div class="col-3 px-5 pb-3">
                                     <a href="/profile/{{ $unfollow_user->id }}">
-                                        <img src="{{ $imagePath->getImagePath($unfollow_user->id)->profileImage() }}" class="rounded-circle w-100">
+                                        @if($imagePath->getImagePath($unfollow_user->id)->profileImage())
+                                            <img src="data:img/png;base64,{{ $imagePath->getImagePath($unfollow_user->id)->profileImage() }}" class="rounded-circle w-100">
+                                        @else
+                                            <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="rounded-circle w-100">
+                                        @endif
                                     </a>
                                 </div>
 
@@ -142,7 +154,11 @@
                             <div class="row">
                                 <div class="col-3 px-5 pb-3">
                                     <a href="/profile/{{ $follow->user_id }}">
-                                        <img src="{{ $follow->profileImage() }}" class="rounded-circle w-100">
+                                        @if($follow->profileImage())
+                                            <img src="data:img/png;base64,{{ $follow->profileImage() }}" class="rounded-circle w-100">
+                                        @else
+                                            <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="rounded-circle w-100">
+                                        @endif
                                     </a>
                                 </div>
 
@@ -175,7 +191,11 @@
                             <div class="row">
                                 <div class="col-3 px-5 pb-3">
                                     <a href="/profile/{{ $unfollow_user->id }}">
-                                        <img src="{{ $imagePath->getImagePath($unfollow_user->id)->profileImage() }}" class="rounded-circle w-100">
+                                        @if($imagePath->getImagePath($unfollow_user->id)->profileImage())
+                                            <img src="data:img/png;base64,{{ $imagePath->getImagePath($unfollow_user->id)->profileImage() }}" class="rounded-circle w-100">
+                                        @else
+                                            <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="rounded-circle w-100">
+                                        @endif
                                     </a>
                                 </div>
 
@@ -206,7 +226,7 @@
         @foreach($posts as $post)
             <div class="col-4 pt-4">
                 <a href="/p/{{ $post->id }}">
-                    <img src="/storage/{{ $post->image }}" class="w-100">
+                    <img src="data:img/png;base64,{{$post->image}}" class="w-100" style="max-width: 100%; height: auto;max-height:40vh;">
                 </a>
             </div>
         @endforeach

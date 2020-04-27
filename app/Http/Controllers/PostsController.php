@@ -47,13 +47,15 @@ class PostsController extends Controller
     {
         $data = $req->all();
 
-        $image_path = request('image')->store('uploads', 'public');
-        $image = Image::make(public_path("storage/{$image_path}"))->fit(1200, 1200);
-        $image->save();
+        // $image_path = request('image')->store('uploads', 'public');
+        // $image = Image::make(public_path("storage/{$image_path}"))->fit(1200, 1200);
+        $image = base64_encode(file_get_contents(request('image')->getRealPath()));
+        // $image->save();
 
         $post =  auth()->user()->posts()->create([
             'caption' => $data['caption'],
-            'image'   => $image_path,
+            // 'image'   => $image_path,
+            'image'   => $image,
         ]);
 
         //タグの登録

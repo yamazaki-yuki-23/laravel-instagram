@@ -61,7 +61,12 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a href="/profile/{{ Auth::user()->id }}">
-                                    <img class="post-profile-icon round-img" src="{{ Auth::user()->profile->profileImage() }}"> <span class="caret"></span>
+                                    @if(Auth::user()->profile->profileImage())
+                                        <img src="data:img/png;base64,{{ Auth::user()->profile->profileImage() }}" class="post-profile-icon round-img">
+                                    @else
+                                        <img src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="post-profile-icon round-img">
+                                    @endif
+                                     <span class="caret"></span>
                                 </a>
                             </li>
                         @endguest

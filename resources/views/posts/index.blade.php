@@ -25,7 +25,7 @@
                     <div class="card">
                         <div class="card-header bg-white align-items-center d-flex">
                             <a class="no-text-decoration" href="/profile/{{ $post->user->id }}">
-                                <img class="post-profile-icon round-img" src="{{ $post->user->profile->profileImage() }}">
+                                <img class="post-profile-icon round-img" src="data:img/png;base64,{{ $post->user->profile->profileImage() }}">
                             </a>
                             <a class="black-color no-text-decoration" href="/profile/{{$post->user->id }}">
                                 <strong>{{  $post->user->username }}</strong>
@@ -38,7 +38,7 @@
                         </div>
 
                         <a href="/profile/{{$post->user->id }}">
-                            <img src="/storage/{{ $post->image }}" class="card-img-top">
+                            <img src="data:img/png;base64,{{$post->image}}" class="card-img-top" style="max-height:70vh;">
                         </a>
 
 

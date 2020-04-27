@@ -24,13 +24,13 @@
             <div v-else>
                 <div class="pt-4">
                     <table class="table table-hover">
-                        <tr><th>#</th><th>ユーザー名</th><th>アイコン</th></tr>
+                        <tr><th>#</th><th>アイコン</th><th>ユーザー名</th></tr>
                         <tr v-for="(item, index) in items" :key="item.id">
                             <td>{{ index + 1 }}</td>
                             <td>
                                 <a :href="'profile/'+item.id" class="card-link">
-                                    <img v-if="item.profile['image']" :src="'/storage/'+item.profile['image']" class="post-profile-icon round-img">
-                                    <img v-else src="/storage/profile/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="post-profile-icon round-img">
+                                    <img v-if="item.profile['image']" :src="'data:img/png;base64,'+item.profile['image']" class="post-profile-icon round-img">
+                                    <img v-else src="Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg" class="post-profile-icon round-img">
                                 </a>
                             </td>
                             <td><a class="card-link" :href="'profile/'+item.id">{{ item.username }}</a></td>
@@ -53,11 +53,6 @@
                 status: false,
                 items: [],
             }
-        },
-
-        beforeCreate(){
-            keyword="";
-            category="";
         },
 
         computed: {
