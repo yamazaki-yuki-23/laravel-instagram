@@ -3,21 +3,6 @@
 @section('content')
 
 <div class="container">
-    <!-- <div class="float-md-right" style="margin-right:100px;">
-    <div class="col-12 mt-5 mx-5">
-        <div class="card">
-            <span class="text-muted pl-3" style="padding-right:4em;">おすすめ</span>
-            <div class="card-body">
-                @foreach($recommend_users as $recommend_user)
-                    <div class="row">
-                        <span class="pl-3">{{ $recommend_user->name }}</span>
-                        <span><follow-button user-id="{{ $recommend_user->id }}" follows="{{ $recommend_user->follow }}"></follow-button></span>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    </div> -->
     <div class="infinite-scroll">
         @forelse ($posts as $post)
             <div class="col-8 offset-md-2">
@@ -25,7 +10,11 @@
                     <div class="card">
                         <div class="card-header bg-white align-items-center d-flex">
                             <a class="no-text-decoration" href="/profile/{{ $post->user->id }}">
-                                <img class="post-profile-icon round-img" src="data:img/png;base64,{{ $post->user->profile->profileImage() }}">
+                                @if($post->user->profile->profileImage())
+                                    <img class="post-profile-icon round-img" src="data:img/png;base64,{{ $post->user->profile->profileImage() }}">
+                                @else
+                                    <img class="post-profile-icon round-img" src="/Psy0tMpnjUQIbumb25Csi1XLLdhLV2QWT2R3K4Zh.jpeg">
+                                @endif
                             </a>
                             <a class="black-color no-text-decoration" href="/profile/{{$post->user->id }}">
                                 <strong>{{  $post->user->username }}</strong>
