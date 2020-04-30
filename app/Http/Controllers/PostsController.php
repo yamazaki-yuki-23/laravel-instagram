@@ -25,7 +25,7 @@ class PostsController extends Controller
         $users[] = Auth::id();
         $posts = Post::whereIn('user_id', $users)->with('user')->latest()->paginate(5);
         //おすすめのユーザーを取得する
-        $recommend_users = User::whereNotIn('id', [$users])->get();
+        $recommend_users = User::whereNotIn('id', $users)->get();
         foreach($recommend_users as $recommend_user){
             $recommend_user['follow'] = $recommend_user->following->contains($recommend_user->id);
         }
