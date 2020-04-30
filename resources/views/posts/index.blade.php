@@ -30,38 +30,26 @@
                             <img src="data:img/png;base64,{{$post->image}}" class="card-img-top" style="max-height:70vh;">
                         </a>
 
-
                         <div class="card-body">
+                            <span><strong>{{ $post->user->username }}</strong></span>
+                            <span>{{ $post->caption }}</span>
                             <div class="row parts">
                                 <div id="like-icon-post-{{ $post->id }}">
-                                    <like-button post-id="{{ $post->id }}" user-id="{{ Auth::user()->id }}" likes="{{ ($post->likedBy(Auth::user())->first()) ? true : false }}"></like-button>
+                                    <like-button
+                                        post-id="{{ $post->id }}"
+                                        user-id="{{ Auth::user()->id }}"
+                                        likes="{{ ($post->likedBy(Auth::user())->first()) ? true : false }}"
+                                        from-link="show">
+                                    </like-button>
                                 </div>
-                                <a class="comment" href="/p/{{ $post->id }}"></a>
                             </div>
                             <div id="like-text-post-{{ $post->id }}">
                                 @include('posts.like_text')
                             </div>
                             <div>
-                                <span><strong>{{ $post->user->username }}</strong></span>
-                                <span>{{ $post->caption }}</span>
-
-                                <div class="overflow-auto mt-2" id="comment-post-{{ $post->id }}" style="max-height:200px;">
-                                    @include('posts.comment_list')
-                                </div>
-                                <a class="light-color post-time no-text-decoration" href="/p/{{ $post->id }}">{{ $post->created_at }}</a>
-                                <hr>
-                                <div class="row actions" id="comment-form-post-{{ $post->id }}">
-                                    <form class="w-100" id="new_comment" action="/comments/{{ $post->id }}" accept-charset="UTF-8" data-remote="true" method="post">
-                                        <input type="hidden" name="utf8" value="&#x2713;">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                        <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                        <add-comment></add-comment>
-                                    </form>
-                                </div>
+                                <add-comment post-id="{{ $post->id }}" created_at="{{ $post->created_at }}" user-id="{{ Auth::id() }}"></add-comment>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

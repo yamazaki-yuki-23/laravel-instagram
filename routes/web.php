@@ -34,8 +34,9 @@ Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.show');
 Route::get('/profile/{user}/edit', 'ProfilesController@edit')->name('profile.edit');
 Route::patch('/profile/{user}', 'ProfilesController@update')->name('profile.update');
 
-Route::post('/comments/{post}', 'CommentsController@store')->name('comments.store');
-Route::get('/comments/{comment}', 'CommentsController@delete')->name('comment.delete');
+Route::post('/comments/{post}', 'CommentsController@store')->name('comments.store')->where('post', '[0-9]+');
+Route::get('/comments/{post}', 'CommentsController@get');
+Route::post('/comments/{comment}/delete', 'CommentsController@delete')->name('comment.delete');
 
 Route::get('/search', 'SearchController@index');
 Route::post('/search/keyword', 'SearchController@search');

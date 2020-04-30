@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Comment;
 use App\Post;
+use App\Rules\CommentRule;
 
 class CommentsController extends Controller
 {
@@ -18,19 +19,29 @@ class CommentsController extends Controller
     {
         $data = request()->validate([
             'comment' => 'required',
+            'post_id' => 'required',
         ]);
+
         auth()->user()->comments()->create([
             'comment' => $data['comment'],
-            'post_id' => $request->post_id,
+            'post_id' => $data['post_id'],
             'user_id' => auth()->user()->id,
         ]);
-        return back()->with('flash_message', 'コメントが追加されました');
+        $comments = Comment::where('post_id', $data['post_id'])->with('user')->get();
+        return $comments;
     }
 
-    public function delete(Comment $comment)
+    public function delete(Request $request)
     {
-        Comment::find($comment->id)->delete();
-        return back()->with('flash_message', 'コメントが削除されました');
+        Comment::find($request->comment_id)->delete();
+        $comments = Comment::where('post_id', $request->post_id)->with('user')->get();
+        return $comments;
+    }
+
+    public function get(Post $post)
+    {
+        $comments = Comment::where('post_id', $post->id)->with('user')->get();
+        return $comments;
     }
 
 }

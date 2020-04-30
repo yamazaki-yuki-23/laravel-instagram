@@ -1917,14 +1917,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['postId', 'created_at', 'userId'],
   data: function data() {
     return {
-      comment: ""
+      comment: "",
+      error: false,
+      complete: false,
+      complete_message: "",
+      errorText: "",
+      comments: []
     };
-  },
-  mounted: function mounted() {
-    this.comment;
   },
   computed: {
     activeSubmit: function activeSubmit() {
@@ -1933,6 +1963,57 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         return false;
       }
+    },
+    getComment: function getComment() {
+      var _this = this;
+
+      axios.get('/comments/' + this.postId).then(function (response) {
+        _this.comments = response.data;
+      });
+      return true;
+    }
+  },
+  methods: {
+    commentSubmit: function commentSubmit() {
+      var _this2 = this;
+
+      this.error = false;
+      this.complete = false;
+      this.errorText = "";
+
+      if (this.comment.replace(/\s+/g, "").length == 0) {
+        this.errorText = "コメントを入力して下さい";
+        this.error = true;
+      } else {
+        axios.post('/comments/' + this.postId, {
+          comment: this.comment,
+          post_id: this.postId
+        }).then(function (response) {
+          _this2.comments = response.data;
+          _this2.comment = "";
+          _this2.complete = true;
+          _this2.complete_message = "投稿が完了しました";
+          setTimeout(_this2.fadeout, 3000);
+        });
+      }
+    },
+    deleteComment: function deleteComment(id) {
+      var _this3 = this;
+
+      this.complete = false;
+      axios.post('/comments/' + id + '/delete', {
+        post_id: this.postId,
+        comment_id: id
+      }).then(function (response) {
+        _this3.comments = response.data;
+        _this3.complete = true;
+        _this3.complete_message = "削除が完了しました";
+        setTimeout(_this3.fadeout, 3000);
+      });
+    },
+    fadeout: function fadeout() {
+      this.complete = false;
+      this.complete_message = "";
     }
   }
 });
@@ -2003,24 +2084,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['userId', 'postId', 'likes'],
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  },
+  props: ['userId', 'postId', 'likes', 'fromLink'],
   data: function data() {
     return {
       status: this.likes,
-      post: []
+      post: [],
+      button_check: false,
+      message: ""
     };
   },
   methods: {
     addUser: function addUser() {
       var _this = this;
 
+      this.button_check = false;
+      this.message = "";
       axios.post('/like/add/' + this.postId).then(function (response) {
         _this.status = !_this.status;
-        console.log(response.data);
+        _this.button_check = true;
+        _this.message = "いいねが押されました";
+        setTimeout(_this.fadeout, 3000);
       })["catch"](function (errors) {
         if (errors.response.status == 401) {
           window.location = '/login';
@@ -2030,14 +2121,22 @@ __webpack_require__.r(__webpack_exports__);
     delUser: function delUser() {
       var _this2 = this;
 
+      this.button_check = false;
+      this.message = "";
       axios.post('/like/remove/' + this.postId).then(function (response) {
         _this2.status = !_this2.status;
-        console.log(response.data);
+        _this2.button_check = true;
+        _this2.message = "いいねが取り消しされました";
+        setTimeout(_this2.fadeout, 3000);
       })["catch"](function (errors) {
         if (errors.response.status == 401) {
           window.location = '/login';
         }
       });
+    },
+    fadeout: function fadeout() {
+      this.button_check = false;
+      this.message = "";
     }
   }
 });
@@ -2128,14 +2227,13 @@ __webpack_require__.r(__webpack_exports__);
         keyword: this.keyword
       }).then(function (response) {
         _this.items = response.data;
-        _this.alert = "";
-        console.log(_this.items); //返却データが空の場合は、警告文を表示する
+        _this.alert = ""; //返却データが空の場合は、警告文を表示する
 
         if (_this.items.length == 0) {
           _this.status = false;
           _this.alert = "一致する結果はありませんでした。";
         } else {
-          _this.status = true; // console.log(this.items);
+          _this.status = true;
         }
       })["catch"](function (errors) {
         if (errors.response.status == 500) {
@@ -37518,46 +37616,132 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "input-group", attrs: { id: "comment" } }, [
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.comment,
-          expression: "comment"
-        }
-      ],
-      staticClass: "form-control comment-input border-0",
-      attrs: {
-        type: "text",
-        name: "comment",
-        id: "textField",
-        placeholder: "コメントを追加 ...",
-        autocomplete: "off"
+  return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "overflow-auto mt-2",
+        staticStyle: { "max-height": "200px" },
+        attrs: { id: "comment-post-" + _vm.postId }
       },
-      domProps: { value: _vm.comment },
-      on: {
-        keyup: _vm.activeSubmit,
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.comment = $event.target.value
-        }
-      }
-    }),
+      [
+        _vm.getComment
+          ? _c(
+              "div",
+              _vm._l(_vm.comments, function(comment) {
+                return _c("span", { key: comment.id }, [
+                  _c("div", { staticClass: "mt-1" }, [
+                    comment["user_id"] + "===" + _vm.userId
+                      ? _c("span", {
+                          staticClass: "delete-comment pr-4",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteComment(comment["id"])
+                            }
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("span", [
+                      _c("strong", [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "no-text-decoration black-color",
+                            attrs: { href: "/profile/" + comment["user_id"] }
+                          },
+                          [_vm._v(_vm._s(comment["user"]["username"]))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(comment["comment"]))])
+                  ])
+                ])
+              }),
+              0
+            )
+          : _vm._e()
+      ]
+    ),
     _vm._v(" "),
-    _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "button",
-        {
-          staticClass: "text-primary btn btn-light",
-          attrs: { type: "submit", disabled: !_vm.activeSubmit }
-        },
-        [_vm._v("投稿する")]
-      )
-    ])
+    _c(
+      "a",
+      {
+        staticClass: "light-color post-time no-text-decoration",
+        attrs: { href: "/p/" + _vm.postId }
+      },
+      [_vm._v(_vm._s(_vm.created_at))]
+    ),
+    _vm._v(" "),
+    _vm.complete
+      ? _c("div", { staticClass: "balloon1-left", attrs: { id: "hide" } }, [
+          _c("p", { domProps: { textContent: _vm._s(_vm.complete_message) } })
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "row actions",
+        attrs: { id: "comment-form-post-" + _vm.postId }
+      },
+      [
+        _c("div", { staticClass: "w-100", attrs: { id: "new_comment" } }, [
+          _vm.error
+            ? _c("div", { staticClass: "pl-3" }, [
+                _c("p", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errorText))
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group", attrs: { id: "comment" } }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.comment,
+                  expression: "comment"
+                }
+              ],
+              staticClass: "form-control comment-input border-0",
+              attrs: {
+                type: "text",
+                name: "comment",
+                id: "textField",
+                placeholder: "コメントを追加 ...",
+                autocomplete: "off"
+              },
+              domProps: { value: _vm.comment },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.comment = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "input-group-append" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "text-primary btn btn-light",
+                  attrs: { type: "submit", disabled: !_vm.activeSubmit },
+                  on: { click: _vm.commentSubmit }
+                },
+                [_vm._v("投稿する")]
+              )
+            ])
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -37613,25 +37797,43 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.status
-      ? _c(
-          "a",
-          {
-            staticClass: "loved hide-text",
-            attrs: { "data-remote": "true" },
-            on: { click: _vm.delUser }
-          },
-          [_vm._v("いいねを取り消す")]
-        )
-      : _c(
-          "a",
-          {
-            staticClass: "love hide-text",
-            attrs: { "data-remote": "true" },
-            on: { click: _vm.addUser }
-          },
-          [_vm._v("いいね")]
-        )
+    _vm.button_check
+      ? _c("div", { staticClass: "balloon2-left", attrs: { id: "hide" } }, [
+          _c("p", { domProps: { textContent: _vm._s(_vm.message) } })
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "row pl-3" }, [
+      _vm.status
+        ? _c(
+            "a",
+            {
+              staticClass: "loved hide-text",
+              attrs: { "data-remote": "true" },
+              on: { click: _vm.delUser }
+            },
+            [_vm._v("いいねを取り消す")]
+          )
+        : _c(
+            "a",
+            {
+              staticClass: "love hide-text",
+              attrs: { "data-remote": "true" },
+              on: { click: _vm.addUser }
+            },
+            [_vm._v("いいね")]
+          ),
+      _vm._v(" "),
+      _vm.fromLink
+        ? _c("a", {
+            staticClass: "comment",
+            attrs: { href: "/p/" + _vm.postId }
+          })
+        : _c("a", {
+            staticClass: "comment",
+            attrs: { "data-remote": "true", href: "javascript:focusMethod();" }
+          })
+    ])
   ])
 }
 var staticRenderFns = []
@@ -37751,7 +37953,10 @@ var render = function() {
                         _c("a", { attrs: { href: "p/" + item.id } }, [
                           _c("img", {
                             staticClass: "w-100",
-                            attrs: { src: "/storage/" + item.image }
+                            attrs: {
+                              src: "data:img/png;base64," + item.image,
+                              id: "img-size"
+                            }
                           })
                         ])
                       ]

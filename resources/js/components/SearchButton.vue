@@ -17,7 +17,7 @@
             <div class="row" v-if="category === 'タグ'">
                 <div class="col-4 pt-4" v-for="item in items" :key="item.id">
                     <a :href="'p/'+item.id">
-                        <img :src="'/storage/'+item.image"  class="w-100">
+                        <img :src="'data:img/png;base64,'+item.image" class="w-100" id="img-size">
                     </a>
                 </div>
             </div>
@@ -76,14 +76,12 @@
                 .then(response => {
                     this.items = response.data;
                     this.alert = "";
-                    console.log(this.items);
                     //返却データが空の場合は、警告文を表示する
                     if(this.items.length == 0){
                         this.status = false;
                         this.alert = "一致する結果はありませんでした。";
                     }else{
                         this.status = true;
-                        // console.log(this.items);
                     }
                 })
                 .catch(errors => {

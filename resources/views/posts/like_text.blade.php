@@ -3,7 +3,7 @@
     @if ($loop->count == 1)
       {{ $like->user->username }} </strong> が「いいね！」しました
     @elseif ($loop->last)
-      </strong>and<strong>
+      </strong>と<strong>
       {{ $like->user->username }}</strong> が「いいね！」しました
     @elseif (!$loop->first)
       </strong>他{{$loop->remaining + 1}}人が「いいね！」しました

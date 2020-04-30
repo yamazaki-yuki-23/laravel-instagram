@@ -144,7 +144,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="followsModalLongTitle">フォロー中</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <sapn aria-hidden="true">&times;</sapn>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -226,7 +226,7 @@
         @foreach($posts as $post)
             <div class="col-4 pt-4">
                 <a href="/p/{{ $post->id }}">
-                    <img src="data:img/png;base64,{{$post->image}}" class="w-100" style="max-width: 100%; height: auto;max-height:40vh;">
+                    <img src="data:img/png;base64,{{$post->image}}" class="w-100" id="img-size">
                 </a>
             </div>
         @endforeach

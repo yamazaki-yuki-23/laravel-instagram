@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\User;
 use App\Tag;
+use App\Comment;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -70,21 +71,20 @@ class PostsController extends Controller
 
     public function delete($post_id)
     {
-        //ストレージから写真を削除
-        $image_path = Post::where('id', $post_id)->value('image');
-        Storage::delete('public/'. $image_path);
-
         Post::find($post_id)->delete();
+        Comment::where('post_id',$post_id)->delete();
+        \DB::table('post_tag')->where('post_id', $post_id)->delete();
         return redirect('/')->with('flash_message', '削除されました');
     }
 
     private function format_tag($tags)
     {
+        $tags = str_replace("、", ",", $tags);
         $array_tags = explode(",", $tags);
         $tags = [];
         foreach($array_tags as  $tag) {
             if(substr($tag, 0, 1) !==  "#") {
-                $tag[] = substr_replace($tag, "#", 0, 1);
+                $tag = "#".$tag;
             }
             // #(ハッシュタグ)で始まる単語を取得。結果は、$matchに多次元配列で代入される。
             preg_match_all('/#([a-zA-z0-9０-９ぁ-んァ-ヶ亜-熙]+)/u', $tag, $match);

@@ -129,6 +129,7 @@ return [
         'title'         => 'タイトル',
         'url'           => 'ウェブサイト',
         'description'   => '自己紹介',
+        'username'      => 'ユーザーネーム',
     ],
 
 ];
